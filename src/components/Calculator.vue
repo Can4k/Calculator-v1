@@ -151,7 +151,7 @@ export default {
       console.log(this.example_array);
       this.firstOrder();
       this.secondOrder();
-      return this.example_array[0];
+      return this.example_array[0] === Math.floor(this.example_array[0]) ? this.example_array[0] : this.example_array[0].toFixed(4);
     }
   },
   mounted() {
@@ -175,9 +175,6 @@ export default {
   background-color: gray;
   width: 340px;
   height: 550px;
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
   border-radius: 30px;
   padding: 20px 20px 0 20px;
   z-index: 1;
@@ -201,6 +198,6 @@ export default {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Arial";
 }
 </style>
