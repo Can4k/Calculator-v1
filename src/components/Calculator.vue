@@ -2,25 +2,25 @@
   <div class="calculator-container">
     <calculator-display :data="current_data"/>
     <div class="buttons-field">
-      <!--Прошу прощения за этот код <=> I apologize for this code-->
-      <calculator-button symbol="7" @clicked="clicked"/>
-      <calculator-button symbol="8" @clicked="clicked"/>
-      <calculator-button symbol="9" @clicked="clicked"/>
-      <calculator-button symbol="+" @clicked="clicked"/>
-      <calculator-button symbol="4" @clicked="clicked"/>
-      <calculator-button symbol="5" @clicked="clicked"/>
-      <calculator-button symbol="6" @clicked="clicked"/>
-      <calculator-button symbol="-" @clicked="clicked"/>
-      <calculator-button symbol="1" @clicked="clicked"/>
-      <calculator-button symbol="2" @clicked="clicked"/>
-      <calculator-button symbol="3" @clicked="clicked"/>
-      <calculator-button symbol="*" @clicked="clicked"/>
-      <calculator-button symbol="0" @clicked="clicked"/>
-      <calculator-button symbol="." @clicked="clicked"/>
-      <calculator-button symbol="/" @clicked="clicked"/>
+      <!--Прошу прощения за этот код. I apologize for this code-->
+      <calculator-button ref="b7" symbol="7" @clicked="clicked"/>
+      <calculator-button ref="b8" symbol="8" @clicked="clicked"/>
+      <calculator-button ref="b9" symbol="9" @clicked="clicked"/>
+      <calculator-button ref="b+" symbol="+" @clicked="clicked"/>
+      <calculator-button ref="b4" symbol="4" @clicked="clicked"/>
+      <calculator-button ref="b5" symbol="5" @clicked="clicked"/>
+      <calculator-button ref="b6" symbol="6" @clicked="clicked"/>
+      <calculator-button ref="b-" symbol="-" @clicked="clicked"/>
+      <calculator-button ref="b1" symbol="1" @clicked="clicked"/>
+      <calculator-button ref="b2" symbol="2" @clicked="clicked"/>
+      <calculator-button ref="b3" symbol="3" @clicked="clicked"/>
+      <calculator-button ref="b*" symbol="*" @clicked="clicked"/>
+      <calculator-button ref="b0" symbol="0" @clicked="clicked"/>
+      <calculator-button ref="b." symbol="." @clicked="clicked"/>
+      <calculator-button ref="b/" symbol="/" @clicked="clicked"/>
       <div>
-        <calculator-button symbol="=" @clicked="clicked"/>
-        <calculator-button symbol="clear" @clicked="clicked"/>
+        <calculator-button ref="b=" symbol="=" @clicked="clicked"/>
+        <calculator-button ref="bBackspace" symbol="clear" @clicked="clicked"/>
       </div>
     </div>
   </div>
@@ -29,6 +29,7 @@
 <script>
 import CalculatorDisplay from "@/components/CalculatorDisplay";
 import CalculatorButton from "@/components/CalculatorButton";
+import legalSymbols from "@/main";
 export default {
   name: "Calculator",
   components: {
@@ -87,6 +88,26 @@ export default {
         this.example_array.push(+tmp);
       }
     },
+    zeroOrder() {
+      if (this.example_array[0] === '-') {
+        this.example_array[0] = "@";
+        this.example_array[1] *= -1;
+      }
+      for (let i = 0; i < this.example_array.length - 1; i++) {
+        if (this.example_array[i] === '*' && this.example_array[i + 1] === '-') {
+          this.example_array[i + 2] *= -1;
+          this.example_array[i + 1] = "@";
+          this.transformation();
+          i = 0;
+        }
+        if (this.example_array[i] === '/' && this.example_array[i + 1] === '-') {
+          this.example_array[i + 2] *= -1;
+          this.example_array[i + 1] = "@";
+          this.transformation();
+          i = 0;
+        }
+      }
+    },
     firstOrder() {
       for (let i = 0; i < this.example_array.length; i++) {
         if (this.example_array[i] === '*') {
@@ -126,6 +147,8 @@ export default {
         return "";
       }
       this.createArray();
+      this.zeroOrder();
+      console.log(this.example_array);
       this.firstOrder();
       this.secondOrder();
       return this.example_array[0];
@@ -133,60 +156,15 @@ export default {
   },
   mounted() {
     document.addEventListener('keydown', (e) => {
-      this.example = "";
-      this.example_array = [];
-     const k = e.key;
-      if (k === '7') {
-        document.getElementsByClassName('button')[0].click();
+      let code = e.key;
+      if (legalSymbols.indexOf(code) === -1) {
+        return;
       }
-      if (k === '8') {
-        document.getElementsByClassName('button')[1].click();
+      if (code === "Enter") {
+        code = "=";
       }
-      if (k === '9') {
-        document.getElementsByClassName('button')[2].click();
-      }
-      if (k === '+') {
-        document.getElementsByClassName('button')[3].click();
-      }
-      if (k === '4') {
-        document.getElementsByClassName('button')[4].click();
-      }
-      if (k === '5') {
-        document.getElementsByClassName('button')[5].click();
-      }
-      if (k === '6') {
-        document.getElementsByClassName('button')[6].click();
-      }
-      if (k === '-') {
-        document.getElementsByClassName('button')[7].click();
-      }
-      if (k === '1') {
-        document.getElementsByClassName('button')[8].click();
-      }
-      if (k === '2') {
-        document.getElementsByClassName('button')[9].click();
-      }
-      if (k === '3') {
-        document.getElementsByClassName('button')[10].click();
-      }
-      if (k === '*') {
-        document.getElementsByClassName('button')[11].click();
-      }
-      if (k === '0') {
-        document.getElementsByClassName('button')[12].click();
-      }
-      if (k === '.') {
-        document.getElementsByClassName('button')[13].click();
-      }
-      if (k === '/') {
-        document.getElementsByClassName('button')[14].click();
-      }
-      if (k === '=' || k === 'Enter') {
-        document.getElementsByClassName('eqls')[0].click();
-      }
-      if (k === 'Backspace') {
-        document.getElementsByClassName('cl')[0].click();
-      }
+      this.example = ""; this.example_array = [];
+      this.$refs['b' + code].clicked();
     })
   }
 }
