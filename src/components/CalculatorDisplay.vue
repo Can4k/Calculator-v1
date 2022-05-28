@@ -26,18 +26,20 @@ export default {
       return Math.floor(metrics.width);
     }
   },
-  updated() {
-    let w = this.getTextWidth(this.data, "Arial");
-    if (w <= 40) {
-      this.textStyle.fontSize = 50;
-    } else if (w <= 70) {
-      this.textStyle.fontSize = 30;
-    } else if (w <= 120) {
-      this.textStyle.fontSize = 20;
-    } else {
-      this.textStyle.fontSize = 10;
-    }
-    this.textStyle.fontSize += "px";
+  mounted() {
+    document.addEventListener('click', () => {
+      let w = this.getTextWidth(this.data, "Arial");
+      if (w <= 40) {
+        this.textStyle.fontSize = 50;
+      } else if (w <= 70) {
+        this.textStyle.fontSize = 30;
+      } else if (w <= 120) {
+        this.textStyle.fontSize = 20;
+      } else {
+        this.textStyle.fontSize = 10;
+      }
+      this.textStyle.fontSize += "px";
+    })
   }
 }
 </script>

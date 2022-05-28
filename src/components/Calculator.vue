@@ -148,7 +148,6 @@ export default {
       }
       this.createArray();
       this.zeroOrder();
-      console.log(this.example_array);
       this.firstOrder();
       this.secondOrder();
       return this.example_array[0] === Math.floor(this.example_array[0]) ? this.example_array[0] : this.example_array[0].toFixed(4);
